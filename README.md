@@ -11,8 +11,9 @@ Convert bitmap images into SVGs made of colored rectangles, one rectangle per pi
 
 Run these commands in the project directory.
 
-[!TIP]
-Optional: if you prefer an isolated environment, create and activate a virtual environment before installing the dependencies.
+> Optional: if you prefer an isolated environment, create and activate a virtual environment before installing the dependencies. 
+> 
+> If you do not know what this means, skip it.
 
 ### 1. Install dependencies
 
