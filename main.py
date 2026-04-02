@@ -27,12 +27,12 @@ parser.add_argument('--pixel_size',
                     type=float, 
                     nargs='?', 
                     default=1.0, 
-                    help='The size of each pixel in the output SVG. Default is 1.0.')
+                    help='The size of each pixel in the output SVG in px. Default is 1.0.')
 parser.add_argument('--overlap',
                     type=float, 
                     nargs='?', 
                     default=None, 
-                    help='The overlap between adjacent pixels, in pixels, used to help prevent visible gaps. Must be smaller than pixel_size. If omitted, the default is 10%% of pixel_size.')
+                    help='The overlap between adjacent pixels, in px, used to help prevent visible gaps. Must be smaller than pixel_size. If omitted, the default is 10%% of pixel_size.')
 
 args = parser.parse_args()
 
