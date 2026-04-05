@@ -33,6 +33,9 @@ parser.add_argument('--overlap',
                     nargs='?', 
                     default=None, 
                     help='The overlap between adjacent pixels, in px, used to help prevent visible gaps. Must be smaller than pixel_size. If omitted, the default is 10%% of pixel_size.')
+parser.add_argument('--outline',
+                    action='store_true',
+                    help='Add thin colored outlines along pixel edges to help eliminate rendering issues at the seams.')
 
 args = parser.parse_args()
 
@@ -50,6 +53,9 @@ if args.overlap >= args.pixel_size:
 
 if args.preserve_alpha and args.overlap != 0:
     parser.error('overlap must be 0 when preserve_alpha is True. Please retry with --overlap 0 or disable preserve_alpha.')
+
+if args.preserve_alpha and args.outline:
+    parser.error('outline is not compatible with preserve_alpha. Please retry without --outline or disable preserve_alpha.')
 
 from PIL import Image
 import svgwrite
@@ -78,6 +84,23 @@ def main(input_file, output_file, preserve_alpha, pixel_size, overlap):
                 size=(pixel_size + overlap, pixel_size + overlap), 
                 fill=color,
                 fill_opacity=opacity))
+            
+    if args.outline:
+        for x in range(width):
+            for y in range(height):
+                r, g, b, _ = image.getpixel((x, y))  # Get the RGBA values
+                color = svgwrite.rgb(r, g, b, 'RGB')
+
+                dwg.add(dwg.line(
+                    start=((x + 1) * pixel_size, y * pixel_size), 
+                    end=((x + 1) * pixel_size, (y + 1) * pixel_size), 
+                    stroke=color,
+                    stroke_width=0.001 * pixel_size))
+                dwg.add(dwg.line(
+                    start=(x * pixel_size, (y + 1) * pixel_size), 
+                    end=((x + 1) * pixel_size, (y + 1) * pixel_size), 
+                    stroke=color,
+                    stroke_width=0.001 * pixel_size))
 
     # Save the SVG file
     dwg.save()
